@@ -1,26 +1,29 @@
 import { Stack, Text, Button } from '@chakra-ui/react'
 import { useState } from 'react';
+import { Router, useRouter } from 'next/dist/client/router';
 import FormInput from '../Input';
 import axios from 'axios';
+import { redirect } from 'next/dist/server/api-utils';
 axios.defaults.withCredentials = true;
 
-const CreateServiceProviderForm = ({ serviceProvidersChange }) => {
+const CreateCustomerForm = ({ CustomerChange }) => {
+  const router = useRouter()
   let [formValues, setFormValues] = useState({
     name: "",
-    email: ""
+    email: "",
+    password: ""
   })
-  const createServiceProvider = e => {
-    axios.post("http://localhost:80/api/v1/service_providers", {
+  const createCustomer = e => {
+    e.preventDefault()
+    axios.post("http://localhost:80/api/v1/customers", {
       "name": formValues.name,
       "email": formValues.email,
-      "id": 2,
-      "password": formValues.name
+      "password": formValues.password
     }).then((response) => {
       if (response.status == 200) {
-        axios.get('http://localhost:80/api/v1/service_providers').then((r) => serviceProvidersChange(r.data))
+        router.push("http://localhost:3000/customer/login")
       }
     })
-    e.preventDefault()
   }
 
   const setValue = (fieldName) => {
@@ -49,22 +52,31 @@ const CreateServiceProviderForm = ({ serviceProvidersChange }) => {
         email: newValue
       })
     }
+  }, {
+    fieldName: "password",
+    typeName: "password",
+    valueChange: (newValue) => {
+      setFormValues({
+        ...formValues,
+        password: newValue
+      })
+    }
   }]
   return (
-    <form onSubmit={createServiceProvider}>
+    <form onSubmit={createCustomer}>
       <Stack>
-        <Text>Create New Service Provider</Text>
+        <Text>Customer Sign Up</Text>
         {/* <FormInput typeName="name" value={formValues.name} valueChange={setValue("name")} />
         <FormInput typeName="email" value={formValues.email} valueChange={setValue("email")} /> */}
         {inputs.map((formInput) => {
-          return <FormInput key={`form_${formInput.fieldName}`} fieldName={formInput.fieldName} typeName={formInput.typeName} value={formValues[formInput.fieldName]} valueChange={formInput.valueChange} />
+          return <FormInput key={`form_${formInput.fieldName}`} typeName={formInput.typeName} value={formValues[formInput.fieldName]} valueChange={formInput.valueChange} />
         })}
       </Stack>
       <Button type='submit'>
-        Create
+        Sign up
       </Button>
     </form>
   )
 }
 
-export default CreateServiceProviderForm
+export default CreateCustomerForm

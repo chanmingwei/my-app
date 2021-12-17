@@ -1,8 +1,8 @@
 import { Input } from '@chakra-ui/react'
 
-const FormInput = ({ typeName, value, valueChange }) => {
+const FormInput = ({ fieldName, typeName, value, valueChange }) => {
   return (
-    <Input placeholder={typeName} type={typeName} value={value} onChange={e => valueChange(e.currentTarget.value)} w="500px" />
+    <Input placeholder={fieldName} type={typeName} value={value} onChange={e => valueChange(e.currentTarget.value)} w="500px" />
   )
 }
 
