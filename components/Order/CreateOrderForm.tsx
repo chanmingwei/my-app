@@ -1,67 +1,108 @@
-import { Stack, Text, Button } from '@chakra-ui/react'
+import {
+  Input,
+  Box,
+  Stack,
+  Text,
+  Button,
+  FormLabel,
+  HStack,
+  Heading,
+  Drawer,
+  DrawerBody,
+  Divider,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure
+} from '@chakra-ui/react'
 import { useState } from 'react';
-import { Session } from 'inspector';
 import { Router, useRouter } from 'next/dist/client/router';
-import FormInput from '../Input'; import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import axios from 'axios';
 import { redirect } from 'next/dist/server/api-utils';
 import moment from "moment";
+import CreateDetailForm from './CreateDetailForm';
 axios.defaults.withCredentials = true;
 
-const CreateOrderForm = ({ OrderChange }) => {
+const CreateOrderForm = () => {
   const router = useRouter()
-  let [formValues, setFormValues] = useState({
-    availabilityStartTime: "",
-    availabilityEndTime: ""
+  const [formValues, changeFormValues] = useState({
+    orderDetail: {
+      billingAddress: "\n\n\n"
+    },
+    services: Array()
   })
-  const createOrder = e => {
-    e.preventDefault()
-    axios.post("http://localhost:80/api/v1/orders", {
-      "start_time": moment(formValues.availabilityStartTime).toISOString(),
-      "end_time": moment(formValues.availabilityEndTime).toISOString(),
-    })
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  let updateBillingAddress = (billAddress, newAddress, idx) => {
+    const billAddressArr = billAddress.split("\n")
+    billAddressArr[idx] = newAddress
+    return billAddressArr.join("\n")
   }
 
-  const setValue = (fieldName) => {
-    return (newValue) => {
-      setFormValues({
-        ...formValues,
-        [fieldName]: newValue
-      })
-    }
+  const createOrder = e => {
+    e.preventDefault()
+    axios.post("http://localhost:80/api/v1/orders", formValues).then((response) => {
+      if (response.status == 200) {
+        console.log("200")
+      }
+    })
+
   }
-  const inputs = [{
-    fieldName: "availabilityStartTime",
-    valueChange: (newValue) => {
-      setFormValues({
-        ...formValues,
-        availabilityStartTime: newValue
-      })
-    }
-  }, {
-    fieldName: "availabilityEndTime",
-    valueChange: (newValue) => {
-      setFormValues({
-        ...formValues,
-        availabilityEndTime: newValue
-      })
-    }
-  }]
   return (
     <form onSubmit={createOrder}>
-      <Stack>
-        <Text>Create Orders</Text>
-        {inputs.map((formInput) => {
-          return <DateTimePicker key={`form_${formInput.fieldName}`} value={formValues[formInput.fieldName]} onChange={formInput.valueChange} />
-        })}
+      <Stack m="10" direction={"column"} spacing="10">
+        <Box p="5" bg="blue.200" pos='sticky' w='full'>
+          <Heading>Order Details</Heading>
+          {formValues.orderDetail.billingAddress.split("\n").map((address, idx) => {
+            return (
+              <HStack key={`billAddress_${idx}`}>
+                <FormLabel>Billing Address Line {idx + 1}:</FormLabel>
+                <Input onChange={e => {
+                  changeFormValues({
+                    ...formValues,
+                    orderDetail: {
+                      billingAddress: updateBillingAddress(formValues.orderDetail.billingAddress, e.currentTarget.value, idx)
+                    }
+                  });
+                }}></Input>
+              </HStack>
+            )
+          })
+          }
+
+        </Box>
+        <Button
+          display={'flex'}
+          alignSelf={'end'}
+          onClick={() => {
+            changeFormValues({
+              ...formValues,
+              services: formValues.services.concat({
+                airconNumber: 0,
+                serviceType: ""
+              })
+            });
+          }}>Add New Service</Button>
+        <Divider />
+        <Stack overflowY={'scroll'} maxH="350" spacing="10" padding="5">
+          {formValues.services.map((service, idx) => {
+            return (<CreateDetailForm key={`service_${idx}`} idx={idx} val={formValues} changeVal={changeFormValues} />)
+          })}
+        </Stack>
       </Stack>
-      <Button type='submit'>
-        Create Order
-      </Button>
-    </form>
+      <Box pos='fixed' bottom='0' right='0'>
+        <Button
+          display={'flex'}
+          m="10" type='submit' onClick={onOpen}>
+          Move on to Availabilities...
+        </Button>
+      </Box>
+    </form >
   )
 }
 

@@ -14,12 +14,12 @@ const Home: NextPage = () => {
   const currentOrders = stateManager[0]
   const setOrders = stateManager[1]
   // console.log(initialServiceProviders)
-  // useEffect(() => {
-  //   axios.get('http://localhost:80/api/v1/orders').then((r) => setOrders(r.data))
-  // }, [])
+  useEffect(() => {
+    axios.get('http://localhost:80/api/v1/orders').then((r) => setOrders(r.data))
+  }, [])
   return (
     <>
-      {/* <OrderTable orders={currentOrders} /> */}
+      <OrderTable orders={currentOrders} />
       <CreateOrderForm OrderChange={setOrders} />
     </>
 

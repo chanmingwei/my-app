@@ -21,7 +21,7 @@ const LoginCustomerForm = ({ CustomerChange }) => {
   }
   const loginCustomer = e => {
     e.preventDefault()
-    axios.post("http://localhost:80/authenticate",
+    axios.post("http://localhost:80/login/customer",
       {
         "email": formValues.email,
         "password": formValues.password
@@ -29,7 +29,7 @@ const LoginCustomerForm = ({ CustomerChange }) => {
       config
     ).then((response) => {
       if (response.status == 200) {
-        router.push("http://localhost:3000/customer/order")
+        router.push("http://localhost:3000/customer/dashboard")
       }
     })
   }
