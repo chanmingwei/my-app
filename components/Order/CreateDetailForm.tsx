@@ -24,7 +24,7 @@ const CreateDetailForm = ({ idx, val, changeVal }) => {
   return (<Box p='10' bg='blue.300' >
     < Stack direction="row" justifyContent={'space-between'}>
       <Stack direction="column">
-        <Heading>Service {idx + 1}</Heading>
+        <Heading>Service {val.services.length - idx}</Heading>
         <FormLabel>Number of aircons:</FormLabel>
         <Input type="number" onChange={e => {
           let num = parseInt(e.currentTarget.value)

@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^1.7.2",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
+    "@orange_digital/chakra-datepicker": "^1.0.3",
     "axios": "^0.24.0",
     "framer-motion": "^4.1.17",
     "moment": "^2.29.1",
@@ -19,11 +20,16 @@
     "next-auth": "^4.0.6",
     "nextjs-auth": "^0.0.5",
     "react": "17.0.2",
+    "react-calendar-datetime-picker": "^1.5.7",
     "react-datetime-picker": "^3.4.3",
+    "react-day-picker": "^8.0.0-beta.36",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
+    "react-modern-calendar-datepicker": "^3.1.6",
     "react-query": "^3.33.5",
-    "react-slick": "^0.28.1"
+    "react-router-dom": "^6.2.1",
+    "react-slick": "^0.28.1",
+    "slotpicker": "^2.4.4"
   },
   "devDependencies": {
     "@types/node": "16.11.9",
