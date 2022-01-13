@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import DataContext from '../context';
 import { useState, useContext } from 'react';
+import { useStore } from 'react-redux';
 import { Router, useRouter } from 'next/dist/client/router';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
@@ -23,9 +24,15 @@ axios.defaults.withCredentials = true;
 
 
 const CreateOrderForm = () => {
+  const store = useStore()
   const router = useRouter()
-  const value = useContext(DataContext)
-  let temp_services = value.formValues.services
+  const [formValues, changeFormValues] = useState({
+    orderDetail: {
+      billingAddress: "\n\n\n"
+    },
+    services: Array()
+  })
+  let temp_services = formValues.services
   let updateBillingAddress = (billingAddress, newAddress, idx) => {
     const billingAddressArr = billingAddress.split("\n")
     billingAddressArr[idx] = newAddress
@@ -34,6 +41,7 @@ const CreateOrderForm = () => {
 
   const createOrder = e => {
     e.preventDefault()
+    store.dispatch({ type: "ORDER_DETAIL", payload: { client: formValues } })
     router.push("http://localhost:3000/availability/create")
 
   }
@@ -42,15 +50,15 @@ const CreateOrderForm = () => {
       <Stack m="10" direction={"column"} spacing="10">
         <Box p="5" bg="blue.200" pos='sticky' w='full'>
           <Heading>Order Details</Heading>
-          {value.formValues.orderDetail.billingAddress.split("\n").map((address, idx) => {
+          {formValues.orderDetail.billingAddress.split("\n").map((address, idx) => {
             return (
               <HStack key={`billAddress_${idx}`}>
                 <FormLabel>Billing Address Line {idx + 1}:</FormLabel>
                 <Input onChange={e => {
-                  value.changeFormValues({
-                    ...value.formValues,
+                  changeFormValues({
+                    ...formValues,
                     orderDetail: {
-                      billingAddress: updateBillingAddress(value.formValues.orderDetail.billingAddress, e.currentTarget.value, idx)
+                      billingAddress: updateBillingAddress(formValues.orderDetail.billingAddress, e.currentTarget.value, idx)
                     }
                   });
                 }}></Input>
@@ -68,15 +76,15 @@ const CreateOrderForm = () => {
               airconNumber: 0,
               serviceType: ""
             })
-            value.changeFormValues({
-              ...value.formValues,
+            changeFormValues({
+              ...formValues,
               services: temp_services
             });
           }}>Add New Service</Button>
         <Divider />
         <Stack overflowY={'scroll'} maxH="350" spacing="10" padding="5">
-          {value.formValues.services.map((service, idx) => {
-            return (<CreateDetailForm key={`service_${idx}`} idx={idx} val={value.formValues} changeVal={value.changeFormValues} />)
+          {formValues.services.map((service, idx) => {
+            return (<CreateDetailForm key={`service_${idx}`} idx={idx} val={formValues} changeVal={changeFormValues} />)
           })}
         </Stack>
       </Stack>
