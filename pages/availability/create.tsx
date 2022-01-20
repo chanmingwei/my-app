@@ -3,22 +3,20 @@ import TopNavBar from '../../components/General/topnav'
 import OrderSummary from "../../components/Order/OrderSummary"
 import CreateAvailabilityForm from '../../components/Availability/createAvailabilityForm'
 import { useState } from 'react'
-import { useStore } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Button, Box, Stack } from '@chakra-ui/react'
 import AvailabilityTable from '../../components/Availability/AvailabilityTable'
 
 const CreateAvailability = () => {
-  const store = useStore()
-  const orderDetail = store.getState().client
-  console.log(store.getState())
-  console.log(orderDetail)
+  const order = useSelector(state => state.order)
+  console.log(order)
   const [formValues, setFormValues] = useState([])
   const estimatedHours = 3
   return (
     <form>
       <TopNavBar bool={true} />
       <Box m="10" p="5" bg="blue.200">
-        <OrderSummary formValues={orderDetail} estimatedHours={estimatedHours}></OrderSummary>
+        <OrderSummary formValues={order} estimatedHours={estimatedHours}></OrderSummary>
       </Box>
       <Stack direction="row">
         <CreateAvailabilityForm formValues={formValues} setFormValues={setFormValues} estimatedHours={estimatedHours} />

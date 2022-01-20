@@ -2,15 +2,20 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import React, { FC, useState } from 'react';
-import { wrapper } from '../components/store';
+import reducer from '../reducer';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 const WrappedApp: FC<AppProps> = ({ Component, pageProps }) => {
+  const store = createStore(reducer)
   return (
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </Provider>
   )
 }
 
-export default wrapper.withRedux(WrappedApp);
+export default WrappedApp;
 

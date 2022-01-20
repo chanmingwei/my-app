@@ -9,9 +9,8 @@ import {
   Divider,
   useDisclosure
 } from '@chakra-ui/react'
-import DataContext from '../context';
 import { useState, useContext } from 'react';
-import { useStore } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Router, useRouter } from 'next/dist/client/router';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
@@ -24,7 +23,7 @@ axios.defaults.withCredentials = true;
 
 
 const CreateOrderForm = () => {
-  const store = useStore()
+  const dispatch = useDispatch()
   const router = useRouter()
   const [formValues, changeFormValues] = useState({
     orderDetail: {
@@ -41,7 +40,7 @@ const CreateOrderForm = () => {
 
   const createOrder = e => {
     e.preventDefault()
-    store.dispatch({ type: "ORDER_DETAIL", payload: { client: formValues } })
+    dispatch({ type: "CREATE ORDER", payload: formValues })
     router.push("http://localhost:3000/availability/create")
 
   }
@@ -91,7 +90,7 @@ const CreateOrderForm = () => {
       <Box pos='fixed' bottom='0' right='0'>
         <Button
           display={'flex'}
-          m="10" type='submit' onClick={createOrder}>
+          m="10" type='submit'>
           Move on to Availabilities...
         </Button>
       </Box>
