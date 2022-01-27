@@ -11,7 +11,6 @@ import {
 import styles from './availability_table.module.css'
 
 const AvailabilityTable = ({ formValues }) => {
-  console.log(formValues)
   return (<Table variant='unstyled'>
     <Thead>
       <Tr>

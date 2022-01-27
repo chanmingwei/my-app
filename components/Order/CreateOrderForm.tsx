@@ -73,7 +73,7 @@ const CreateOrderForm = () => {
           onClick={() => {
             temp_services.unshift({
               airconNumber: 0,
-              serviceType: ""
+              serviceType: "Regular Cleaning"
             })
             changeFormValues({
               ...formValues,

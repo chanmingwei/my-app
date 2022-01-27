@@ -28,8 +28,15 @@ const CreateAvailabilityForm = ({ formValues, setFormValues, estimatedHours }) =
     startTime: "00:00AM"
   })
 
-  const workerAbuse = (estimatedHours) => {
-    return parseInt(dateTimeRange.startTime.split(":")[0]) + ((dateTimeRange.startTime[-2] == "A") ? 0 : 12) + estimatedHours > 22
+  const timeRange = [
+    "08:00AM", "09:00AM", "10:00AM", "11:00AM",
+    "12:00PM", "01:00PM", "02:00PM", "03:00PM",
+    "04:00PM", "05:00PM", "06:00PM", "07:00PM",
+    "08:00PM", "09:00PM", "10:00PM", "11:00PM"
+  ]
+
+  const workerAbuse = (startTime, estimatedHours) => {
+    return parseInt(startTime.split(":")[0]) + ((startTime[5] == "A") ? 0 : 12) + estimatedHours > 22
   }
   return (
     <Box m="20" maxW="40%">
@@ -50,19 +57,11 @@ const CreateAvailabilityForm = ({ formValues, setFormValues, estimatedHours }) =
                 startTime: e.currentTarget.value
               })
             }}>
-              <option value='08:00 AM'> 08:00 AM </option>
-              <option value='09:00 AM'> 09:00 AM </option>
-              <option value='10:00 AM'> 10:00 AM </option>
-              <option value='11:00 AM'> 11:00 AM </option>
-              <option value='12:00 PM'> 12:00 PM </option>
-              <option value='01:00 PM'> 01:00 PM </option>
-              <option value='02:00 PM'> 02:00 PM </option>
-              <option value='03:00 PM'> 03:00 PM </option>
-              <option value='04:00 PM'> 04:00 PM </option>
-              <option value='05:00 PM'> 05:00 PM </option>
-              <option value='06:00 PM'> 06:00 PM </option>
-              <option value='07:00 PM'> 07:00 PM </option>
-              <option value='08:00 PM'> 08:00 PM </option>
+              {timeRange.map(time => {
+                if (!workerAbuse(time, estimatedHours)) {
+                  return <option value={time}>{time}</option>
+                }
+              })}
             </Select>
             <FormErrorMessage>Please do not abuse our cleaners!</FormErrorMessage>
           </FormControl>

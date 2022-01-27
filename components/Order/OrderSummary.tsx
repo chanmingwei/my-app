@@ -1,6 +1,5 @@
 import { Box, FormLabel, Heading, Stack, Text } from "@chakra-ui/react"
 const OrderSummary = ({ formValues, estimatedHours }) => {
-  console.log(formValues.orderDetail)
   return (
     <Stack direction='row' justifyContent={'space-between'}>
       <Stack direction='column'>
