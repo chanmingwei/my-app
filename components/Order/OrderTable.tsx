@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react'
 
 const OrderTable = ({ formValues }) => {
-  console.log(formValues)
   return (<Table variant='unstyled'>
     <Thead>
       <Tr>

@@ -5,51 +5,19 @@ import { useState, useEffect } from 'react'
 import FilterOrder from '../../components/Order/FilterOrder'
 import axios from 'axios'
 import OrderTable from '../../components/Order/OrderTable'
+import { orderStatus, orderType } from '../../config'
 const CreateOrderPage = () => {
 
   const [listOfOrders, setListOfOrders] = useState([])
   const [filteredOrder, setFilteredOrders] = useState([])
 
   const filterOrder = (order, filters) => {
-
-    if (filters.serviceType == "Regular Cleaning only" && order.type == "Regular Cleaning") {
-      return order
-    } else if (filters.serviceType == "Chemical Wash only" && order.type != "Chemical Wash") {
-      return null
-    } else if (filters.serviceType == "Multi" && (order.type != "Multi")) {
-      return null
-    }
-
-    if (filters.status == "Completed" && order.status != "Completed") {
-      return null
-    } else if (filters.status == "Chemical Wash only" && order.status != "Pending") {
-      return null
-    }
-
-    return null
-
+    return ((filters.serviceType === order.type) && (filters.status === order.status))
   }
   const setTableValuesOnFilter = (currListOfOrders, filters) => {
     const convertedListOfOrders = currListOfOrders.map((order) => {
-      var type = ""
-      var status = ""
-      if (order.type == 0) {
-        type = "Multi"
-      } else if (order.type == 1) {
-        type = "Regular Cleaning"
-      } else if (order.type == 2) {
-        type = "Chemical Wash"
-      }
-      if (order.status == 0) {
-        status = "Pending"
-      } else if (order.status == 1) {
-        status = "Completed"
-      }
-      console.log({
-        ...order,
-        status: status,
-        type: type
-      })
+      var type = orderType[order.type]
+      var status = orderStatus[order.status]
       return {
         ...order,
         status: status,
@@ -58,10 +26,9 @@ const CreateOrderPage = () => {
     })
     let newFilteredOrders = null
     if (!(filters === null)) {
-      newFilteredOrders = convertedListOfOrders.map(order => {
-        return filterOrder(order, filters)
-
-      })
+      newFilteredOrders = convertedListOfOrders.filter(order =>
+        filterOrder(order, filters)
+      )
     } else {
       newFilteredOrders = convertedListOfOrders
     }
