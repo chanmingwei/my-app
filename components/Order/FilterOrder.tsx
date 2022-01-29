@@ -11,13 +11,16 @@ import {
     FormControl,
     Select
 } from '@chakra-ui/react'
+import { orderStatus, orderType } from '../../config';
 import DatePicker, { utils } from 'react-modern-calendar-datepicker';
 import { useState, useContext } from 'react';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import OrderCreated from '../../pages/customer/ordercreated';
+
 
 const FilterOrder = ({ listOfOrders, filterAction }) => {
     const today = utils().getToday()
-    const [serviceType, setServiceType] = useState("Regular Cleaning only");
+    const [serviceType, setServiceType] = useState("Regular Cleaning");
     const [creationStartDate, setCreationStartDate] = useState(today);
     const [creationEndDate, setCreationEndDate] = useState(today);
     const [completionStartDate, setCompletionStartDate] = useState(today);
@@ -30,9 +33,9 @@ const FilterOrder = ({ listOfOrders, filterAction }) => {
                 <Select value={serviceType} onChange={(e) => {
                     setServiceType(e.currentTarget.value)
                 }}>
-                    <option value="Multi">Multi</option>
-                    <option value="Regular Cleaning">Regular Cleaning only</option>
-                    <option value="Chemical Wash">Chemical Wash only</option>
+                    <option value={orderType[orderType.Multi]}>Multi</option>
+                    <option value={orderType[orderType['Regular Cleaning']]}>Regular Cleaning only</option>
+                    <option value={orderType[orderType['Chemical Wash']]}>Chemical Wash only</option>
                 </Select>
             </HStack>
             <HStack>
@@ -63,8 +66,8 @@ const FilterOrder = ({ listOfOrders, filterAction }) => {
                 <Select value={status} onChange={(e) => {
                     setStatus(e.currentTarget.value)
                 }}>
-                    <option value='Completed'>Completed</option>
-                    <option value='Pending'>Pending</option>
+                    <option value={orderStatus.Completed}>Completed</option>
+                    <option value={orderStatus.Pending}>Pending</option>
                 </Select>
             </HStack>
             <Button onClick={() => {
@@ -77,7 +80,7 @@ const FilterOrder = ({ listOfOrders, filterAction }) => {
                     status: status
                 })
             }}>Filter</Button>
-        </Stack>
+        </Stack >
     )
 }
 
