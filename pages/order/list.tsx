@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import FilterOrder from '../../components/Order/FilterOrder'
 import axios from 'axios'
 import OrderTable from '../../components/Order/OrderTable'
-import { orderStatus, orderType } from '../../config'
+import { OrderStatus, OrderType } from '../../config'
 const CreateOrderPage = () => {
 
   const [listOfOrders, setListOfOrders] = useState([])
@@ -16,8 +16,8 @@ const CreateOrderPage = () => {
   }
   const setTableValuesOnFilter = (currListOfOrders, filters) => {
     const convertedListOfOrders = currListOfOrders.map((order) => {
-      var type = orderType[order.type]
-      var status = orderStatus[order.status]
+      var type = OrderType[order.type]
+      var status = OrderStatus[order.status]
       return {
         ...order,
         status: status,

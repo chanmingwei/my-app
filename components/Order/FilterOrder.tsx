@@ -11,7 +11,7 @@ import {
     FormControl,
     Select
 } from '@chakra-ui/react'
-import { orderStatus, orderType } from '../../config';
+import { OrderStatus, OrderType } from '../../config';
 import DatePicker, { utils } from 'react-modern-calendar-datepicker';
 import { useState, useContext } from 'react';
 import "react-modern-calendar-datepicker/lib/DatePicker.css";
@@ -33,9 +33,9 @@ const FilterOrder = ({ listOfOrders, filterAction }) => {
                 <Select value={serviceType} onChange={(e) => {
                     setServiceType(e.currentTarget.value)
                 }}>
-                    <option value={orderType[orderType.Multi]}>Multi</option>
-                    <option value={orderType[orderType['Regular Cleaning']]}>Regular Cleaning only</option>
-                    <option value={orderType[orderType['Chemical Wash']]}>Chemical Wash only</option>
+                    <option value={OrderType[OrderType.Multi]}>Multi</option>
+                    <option value={OrderType[OrderType['Regular Cleaning']]}>Regular Cleaning only</option>
+                    <option value={OrderType[OrderType['Chemical Wash']]}>Chemical Wash only</option>
                 </Select>
             </HStack>
             <HStack>
@@ -66,8 +66,11 @@ const FilterOrder = ({ listOfOrders, filterAction }) => {
                 <Select value={status} onChange={(e) => {
                     setStatus(e.currentTarget.value)
                 }}>
-                    <option value={orderStatus.Completed}>Completed</option>
-                    <option value={orderStatus.Pending}>Pending</option>
+                    <option value={OrderStatus.Completed}>Completed</option>
+                    <option value={OrderStatus.Pending}>Pending</option>
+                    <option value={OrderStatus.Unaccepted}>Unaccepted</option>
+                    <option value={OrderStatus.Cancelled}>Cancelled</option>
+                    <option value={OrderStatus.Failed}>Failed</option>
                 </Select>
             </HStack>
             <Button onClick={() => {
